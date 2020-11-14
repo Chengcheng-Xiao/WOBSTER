@@ -60,4 +60,4 @@ Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduc
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](https://github.com/Chengcheng-Xiao/WOOPs/blob/master/LICENSE.md) file for details
+This project is licensed under the MIT License - see the [LICENSE.md](https://github.com/Chengcheng-Xiao/WOBSTER) file for details
