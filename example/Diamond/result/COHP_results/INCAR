@@ -1,0 +1,90 @@
+SYSTEM = C
+Startparameter for this Run:
+ NWRITE =      1;   LPETIM=F    write-flag & time
+# ISTART =      0    job   : 0-new  1-cont  2-samecu
+ LWAVE = T
+ LCHARG = T
+# LAECHG=T
+ISPIN=1
+#ICHARG=1
+#SYMPREC=0.0001
+LELF = F
+
+#NSIM = 24
+
+#LHFCALC = .TRUE. ; HFSCREEN = 0.2
+# NBANDS = 18
+#ALGO = All ; TIME = 0.3
+# PRECFOCK  = N  ! used PRECFOCK = Normal for high quality calculations
+# NKRED     = 2     ! omit flag for high quality calculations
+#LASPH=T
+
+#Electric Field parameters:
+#EFIELD = 0.05
+#LDIPOL = .TRUE.
+#IDIPOL = 3
+
+# GGA = OR
+# LUSE_VDW = .TRUE.
+# AGGAC = 0.0000
+
+
+# LDAU= .TRUE.
+# LDAUTYPE=2
+# LDAUL= 3      -1     -1
+# LDAUU= 20      0      0
+# LDAUJ= 0      0      0
+
+#LWRITE_UNK=.T.
+#LWANNIER90=.T.
+ISYM=0
+# LSORBIT = .TRUE.
+# ICHARG = 11      ! non selfconsistent run, read CHGCAR
+#LMAXMIX = 6      ! for d elements increase LMAXMIX to 4, f: LMAXMIX = 6
+#  ! you need to set LMAXMIX already in the collinear calculation
+# SAXIS =  1  1  1   ! direction of the magnetic fiele
+#  MAGMOM = 1.0 1.0 6*0.0
+# NBANDS = 96
+GGA_COMPAT=.FALSE.
+
+Electronic Relaxation 1
+
+  NELM   =   200
+  NELMIN =   3
+#  NELMDL=-10
+  EDIFFG = -0.001
+  EDIFF  = 1E-8
+  PREC   =  A
+#  NBANDS = 70
+# ISIF=3
+#IOPTCELL = 1 1 0 1 1 0 0 0 0
+Ionic Relaxation
+  NSW    =  0   for static cal/.
+  NBLOCK =      1 ;   KBLOCK =      5    inner block; outer block
+  IBRION =   -1  ionic relax: 0-MD 1-quasi-New 2-CG
+  POTIM  =  0.5
+  LCORR  =      T    Harris-correction to forces
+  ENCUT  = 500
+
+DOS related values:
+#  ENAUG = 400.0
+ ISMEAR = -5
+# SIGMA = 0.05
+ EMIN=-30
+ EMAX=30
+ LORBIT=11
+ NEDOS=3000
+Electronic Relaxation 2
+
+  ALGO   = N ! Normal     algorithm
+  LDIAG  = T    sub-space diagonalisation
+  LREAL  = F
+#  ROPT  = -2E-4 -2E-4
+#  AMIX = 0.02
+#  BMIX = 0.0001
+#  AMIN_MAG  =0.8
+#  BMIN_MAG=0.0001
+#  MAXMIX = 40
+#  NGX =20
+#  NGY =20
+# NGZ = 18
