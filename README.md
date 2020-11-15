@@ -1,10 +1,10 @@
-# Wannier Orbital Overlap Population tools (WOOPs)
+# Wannier-orbital Basis Suite Towards Electronic-Structure Reconstruction (WOBSTER)
 
-A post-processing tool written in python to get Wannier Orbital Overlap Population (WOOP), Wannier Orbital Hamiltonian Population (WOPP)* from [Wannier90](https://github.com/wannier-developers/wannier90) package.
+A post-processing tool written in python to get Wannier Orbital Overlap Population (WOOP), Wannier Orbital Hamiltonian Population (WOHP)* from [Wannier90](https://github.com/wannier-developers/wannier90) package.
 
 
-Before getting into things, you might want to check out these two papers:
-1.  [arXiv](https://arxiv.org/pdf/2009.01130.pdf)
+Before getting into things, you might want to check out the following paper:
+1.  [*Population Analysis with Wannier Orbitals](https://arxiv.org/pdf/2009.01130.pdf)
 
 ## Getting Started
 
@@ -29,7 +29,7 @@ if you use a supercomputer and don't have enough privilege:
 4. manually install package by `conda install numpy*.tar.bz2`.
 
 ## Useage
-File need for WOOPs:
+File need for calculation:
 
 1. `wannier90_u.mat`
 2. `wannier90.eig`
@@ -37,7 +37,6 @@ File need for WOOPs:
 Detailed preparation for Wannier90 generated files can be found in Wanneir90's user guide, or in the `example` folder.
 
 Please read `input.py` for more information.
-
 
 ## Running the tests
 
@@ -49,14 +48,6 @@ For the method please cite the following paper in any publications arising from 
 
   Sudipta Kundu,Satadeep Bhattacharjee, Seung-Cheol Lee and Manish Jain
   *Population Analysis with Wannier Orbitals*,[arXiv](https://arxiv.org/pdf/2009.01130.pdf)
-
-## Contributing
-
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Authors
-
-* **Chengcheng XIAO** - *Initial work* - [E-mail](iconxicon@me.com)
 
 ## License
 
