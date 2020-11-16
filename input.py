@@ -6,39 +6,27 @@ Python class to get TB hamiltonian from realspace wannier functions.
 """
 from wobster.WOBSTER import *
 
-#---------------------------------------
-# some naming convention
-# U_matrix[k_num,num_bands,num_wann,dat]
-# U_matrix_ct[k,num_wann,num_bands,dat]
-# eigenvals[kpoint_number,band_number]
-# kpoints[kpoint_number,dir]
-
+#---------------------------------------------
 # input parameters:
-num_bands = 8
-num_kpoints = 18**3
-energy_min = -15
-energy_max = 20
-NEDOS = 200
-SIGMA = 0.2
+num_bands = 8       #number of wannier functions
+num_kpoints = 18**3 #total number of K-points
+energy_min = -15    #DOS energy minimum [eV]
+energy_max = 20     #DOS energy maximum [eV]
+NEDOS = 200         #Total number of points between energy_min and energy_max
+SIGMA = 0.2         #smearing factor
 
-# generate stuff
+# read-in data
 eigenvals = get_eig("wannier90.eig",8,num_kpoints)
 U_matrix,kpoints = get_u_matrix("wannier90_u.mat",num_bands,num_bands,num_kpoints)
 
-# # get me DOS
-# dos = get_dos(eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
-# np.savetxt('DOS_total.dat', dos)
-# #----plot total dos----
-# fig, ax = plt.subplots()
-# ax.plot(dos[:,0],dos[:,1])
-# fig.savefig("total_DOS.png", dpi=300)
-
-
+#---------------------------------------------
+# get me DOS
+dos = get_dos(eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
+np.savetxt('DOS_total.dat', dos)
 #----plot total dos----
-# fig, ax = plt.subplots()
-# ax.plot(dos[:,0],dos[:,1])
-# fig.savefig("total_dos.png", dpi=300)
-
+fig, ax = plt.subplots()
+ax.plot(dos[:,0],dos[:,1])
+fig.savefig("total_DOS.png", dpi=300)
 
 #---------------------------------------------
 # get me projected DOS (WOOP)
@@ -46,56 +34,59 @@ U_matrix,kpoints = get_u_matrix("wannier90_u.mat",num_bands,num_bands,num_kpoint
 R1 = [0,0,0]
 R2 = [0,0,0]
 
-# # s-s
-# dos_s = get_WOOP(U_matrix,kpoints,R1,0,eigenvals,num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
-# np.savetxt('DOS_s.dat', dos_s)
-# #----plot partial dos----
-# fig, ax = plt.subplots()
-# ax.plot(dos_s[:,0],dos_s[:,1])
-# fig.savefig("WOOP_s.png", dpi=300)
+# s-s
+dos_s = get_WOOP(U_matrix,kpoints,R1,0,eigenvals,num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
+np.savetxt('DOS_s.dat', dos_s)
+#----plot partial dos----
+fig, ax = plt.subplots()
+ax.plot(dos_s[:,0],dos_s[:,1])
+fig.savefig("WOOP_s.png", dpi=300)
 
 
-# # p
-# dos_px = get_WOOP(U_matrix,kpoints,R1,5,eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
-# np.savetxt('DOS_px.dat', dos_px)
-# dos_py = get_WOOP(U_matrix,kpoints,R1,6,eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
-# np.savetxt('DOS_py.dat', dos_py)
-# dos_pz = get_WOOP(U_matrix,kpoints,R1,7,eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
-# np.savetxt('DOS_pz.dat', dos_pz)
-# dos_p = dos_px
-# dos_p[:,1] = dos_px[:,1]+dos_py[:,1]+dos_pz[:,1]
-# np.savetxt('DOS_p.dat', dos_p)
-# #----plot partial dos----
-# fig, ax = plt.subplots()
-# ax.plot(dos_p[:,0],dos_p[:,1])
-# fig.savefig("WOOP_p.png", dpi=300)
+# p
+dos_px = get_WOOP(U_matrix,kpoints,R1,5,eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
+np.savetxt('DOS_px.dat', dos_px)
+dos_py = get_WOOP(U_matrix,kpoints,R1,6,eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
+np.savetxt('DOS_py.dat', dos_py)
+dos_pz = get_WOOP(U_matrix,kpoints,R1,7,eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
+np.savetxt('DOS_pz.dat', dos_pz)
+dos_p = dos_px
+dos_p[:,1] = dos_px[:,1]+dos_py[:,1]+dos_pz[:,1]
+np.savetxt('DOS_p.dat', dos_p)
+#----plot partial dos----
+fig, ax = plt.subplots()
+ax.plot(dos_p[:,0],dos_p[:,1])
+fig.savefig("WOOP_p.png", dpi=300)
 #---------------------------------------------
 
 #---------------------------------------------
 # get me WOHP
+'''
+rememeber to insert Hopping energy from wannier90_hr.dat to get_WOHP function.
+'''
 
-# # s-s
-# dos_ss = get_WOHP(-3.055005,U_matrix,kpoints,R1,R2,0,4,eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
-# np.savetxt('WOHP_ss.dat', dos_ss)
-# #----plot partial dos----
-# fig, ax = plt.subplots()
-# ax.plot(dos_ss[:,0],dos_ss[:,1])
-# fig.savefig("WOHP_ss.png", dpi=300)
+# s-s
+dos_ss = get_WOHP(-3.055005,U_matrix,kpoints,R1,R2,0,4,eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
+np.savetxt('WOHP_ss.dat', dos_ss)
+#----plot partial dos----
+fig, ax = plt.subplots()
+ax.plot(dos_ss[:,0],dos_ss[:,1])
+fig.savefig("WOHP_ss.png", dpi=300)
 
-# # s-p
-# dos_spx = get_WOHP(-1.701416,U_matrix,kpoints,R1,R2,0,5,eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
-# np.savetxt('WOHP_spx.dat', dos_spx)
-# dos_spy = get_WOHP(-4.251791,U_matrix,kpoints,R1,R2,0,6,eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
-# np.savetxt('WOHP_spy.dat', dos_spy)
-# dos_spz = get_WOHP(-2.415476,U_matrix,kpoints,R1,R2,0,7,eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
-# np.savetxt('WOHP_spz.dat', dos_spz)
-# dos_sp = dos_spx
-# dos_sp[:,1] = dos_spx[:,1]+dos_spy[:,1]+dos_spz[:,1]
-# np.savetxt('WOHP_sp.dat', dos_sp)
-# #----plot partial dos----
-# fig, ax = plt.subplots()
-# ax.plot(dos_sp[:,0],dos_sp[:,1])
-# fig.savefig("WOHP_sp.png", dpi=300)
+# s-p
+dos_spx = get_WOHP(-1.701416,U_matrix,kpoints,R1,R2,0,5,eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
+np.savetxt('WOHP_spx.dat', dos_spx)
+dos_spy = get_WOHP(-4.251791,U_matrix,kpoints,R1,R2,0,6,eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
+np.savetxt('WOHP_spy.dat', dos_spy)
+dos_spz = get_WOHP(-2.415476,U_matrix,kpoints,R1,R2,0,7,eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
+np.savetxt('WOHP_spz.dat', dos_spz)
+dos_sp = dos_spx
+dos_sp[:,1] = dos_spx[:,1]+dos_spy[:,1]+dos_spz[:,1]
+np.savetxt('WOHP_sp.dat', dos_sp)
+#----plot partial dos----
+fig, ax = plt.subplots()
+ax.plot(dos_sp[:,0],dos_sp[:,1])
+fig.savefig("WOHP_sp.png", dpi=300)
 
 # p-p
 dos_pxpx = get_WOHP(-1.348359,U_matrix,kpoints,R1,R2,1,5,eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)

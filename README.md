@@ -36,6 +36,11 @@ File need for calculation:
 
 Detailed preparation for Wannier90 generated files can be found in Wanneir90's user guide, or in the `example` folder.
 
+Make WOBSTER visiable to python by:
+```
+export PYTHONPATH=$PYTHONPATH:/path/to/this/repo
+```
+
 Please read `input.py` for more information.
 
 ## Running the tests

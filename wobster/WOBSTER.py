@@ -3,8 +3,16 @@ import matplotlib.pyplot as plt
 
 def get_u_matrix(file_name,dimension_fix,dimension,num_kpoints):
 
-    ''' a subroutine to get u matrix from seedname_u.mat, optional padding provided '''
-    ''' dimension_fix -> total number of bloch bands(can be extended by padding zeros), dimension -> number of wannier functions, num_kpoints -> number of kpoints '''
+    '''
+    a subroutine to get u matrix from seedname_u.mat, optional padding with zeros
+
+    dimension_fix -> total number of bloch bands(can be extended by padding zeros),
+    dimension -> number of wannier functions, num_kpoints -> number of kpoints
+
+    returns: matrixs, kpoints
+    Format: matrixs[ikpt,iwann,ibnds,real/imaginary]
+            kpoints[ikpt,x/y/z]
+    '''
 
     #readin data to data[]
     file = open(file_name,"r")
@@ -35,19 +43,21 @@ def get_u_matrix(file_name,dimension_fix,dimension,num_kpoints):
         for num_wann in range(dimension):
             for num_bands in range(dimension):
                 for dat in range(2):
-#                    matrixs[k][num_wann][num_bands][dat]= matrix[dimension*num_bands+num_wann][dat] # Manual tells us "row first", and its a LIE
+#                    matrixs[k][num_wann][num_bands][dat]= matrix[dimension*num_bands+num_wann][dat] # Manual tells us "row first", and its a LIE?
                     matrixs[k][num_bands][num_wann][dat]= matrix[dimension*num_wann+num_bands][dat]
-    return matrixs,kpoints
+    return np.array(matrixs,dtype=np.float),np.array(kpoints,dtype=np.float)
 
 def get_eig(file_name,dimension,num_kpoints):
     '''
     get eigenvalues from wannier90.eig file
+
+    returns: eigenvals
+    Format: eigenvals[kpoint_number,band_number]
     '''
     #readin data to data[]
     file = open(file_name,"r")
     content = [x.rstrip("\n") for x in file]
     data = np.array([x.split()[2] for x in content[:]],dtype=np.float)
-    # the format is eigenvals[kpoint_number,band_number]
     eigenvals = data.reshape(num_kpoints,dimension)
     return eigenvals
 
@@ -61,6 +71,9 @@ def get_dos(eigenvals, num_kpoints, e_min, e_max, nedos, T=0.1):
     \delta = exp(-(E_j-\epsilon)**2/T)
 
     where T is the semaring factor.
+
+    returns: dos
+    format:  dos[ieng,energy/dos]
     '''
     dos = np.zeros((nedos,2), dtype=np.float)
     energy = np.linspace(e_min,e_max,nedos)
@@ -74,12 +87,20 @@ def get_dos(eigenvals, num_kpoints, e_min, e_max, nedos, T=0.1):
 
 def coef_gen(U_matrix,ibnd,iwan,R,kpoints,ikpt):
     '''
-    U_matrix: full unitary matrix
-    ibnd: band number
-    iwan: wannier function number
-    R: lattice vectore, should be array(3)
-    kpoints: array contains all kpoints info
-    ikpt: number kpoint
+    Calculate projection coefficient:
+
+        coeff = exp(i*2pi*K*R)*\tilde{U^K_{ibnd, iwan}}
+
+    input:
+        U_matrix: full unitary matrix
+        ibnd: band number
+        iwan: wannier function number
+        R: lattice vectore, should be array(3)
+        kpoints: array contains all kpoints info
+        ikpt: number kpoint
+
+    return: coef
+    Format: coef
     '''
     coef = np.conj(complex(U_matrix[ikpt,ibnd,iwan,0],U_matrix[ikpt,ibnd,iwan,1]))
     kdR = 2*np.pi*np.dot(kpoints[ikpt],R)
@@ -104,6 +125,8 @@ def get_WOOP(U_matrix, kpoints, R, iwan, eigenvals, num_kpoints, e_min, e_max, n
 
     WO)P = \sum_{j,k} C^*_{iwan,R;j} C_{iwan,R;j} \delta(E_j-\epsilon)
 
+    returns: dos
+    format:  dos[ieng,energy/dos]
     '''
     dos = np.zeros((nedos,2), dtype=np.float)
     energy = np.linspace(e_min,e_max,nedos)
@@ -127,6 +150,9 @@ def get_WOHP(Hopping, U_matrix, kpoints, R1, R2, iwan1, iwan2, eigenvals, num_kp
     Hamiltonian weighted projected density of states under Wannier picture.
 
     WOHP = -H_{iwan1,R1; iwan2,R2} \sum_{j,k} C^*_{iwan1,R1;j} C_{iwan2,R2;j} \delta(E_j-\epsilon)
+
+    returns: dos
+    format:  dos[ieng,energy/dos]
     '''
     dos = np.zeros((nedos,2), dtype=np.float)
     energy = np.linspace(e_min,e_max,nedos)
