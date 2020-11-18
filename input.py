@@ -1,7 +1,6 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 """
-Python class to get TB hamiltonian from realspace wannier functions.
 @author: cx219
 """
 from wobster.WOBSTER import *
@@ -22,12 +21,14 @@ U_matrix,kpoints = get_u_matrix("wannier90_u.mat",num_bands,num_bands,num_kpoint
 #---------------------------------------------
 # get me DOS
 # **Note that spin degeneracy is not considered here**
+print "Calculating total dos."
 dos = get_dos(eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
 np.savetxt('DOS_total.dat', dos)
 #----plot total dos----
 fig, ax = plt.subplots()
 ax.plot(dos[:,0],dos[:,1])
 fig.savefig("total_DOS.png", dpi=300)
+print "done."
 
 #---------------------------------------------
 # get me projected DOS (WOOP)
@@ -36,15 +37,18 @@ R1 = [0,0,0]
 R2 = [0,0,0]
 
 # s-s
+print "Calculating WOOPs for s orbital."
 dos_s = get_WOOP(U_matrix,kpoints,R1,0,eigenvals,num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
 np.savetxt('DOS_s.dat', dos_s)
 #----plot partial dos----
 fig, ax = plt.subplots()
 ax.plot(dos_s[:,0],dos_s[:,1])
 fig.savefig("WOOP_s.png", dpi=300)
+print "done."
 
 
 # p
+print "Calculating WOOPs for p orbitals."
 dos_px = get_WOOP(U_matrix,kpoints,R1,5,eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
 np.savetxt('DOS_px.dat', dos_px)
 dos_py = get_WOOP(U_matrix,kpoints,R1,6,eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
@@ -58,6 +62,7 @@ np.savetxt('DOS_p.dat', dos_p)
 fig, ax = plt.subplots()
 ax.plot(dos_p[:,0],dos_p[:,1])
 fig.savefig("WOOP_p.png", dpi=300)
+print "done."
 #---------------------------------------------
 
 #---------------------------------------------
@@ -67,14 +72,17 @@ rememeber to insert Hopping energy from wannier90_hr.dat to get_WOHP function.
 '''
 
 # s-s
+print "Calculating WOHPs between s-s orbitals."
 dos_ss = get_WOHP(-3.055005,U_matrix,kpoints,R1,R2,0,4,eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
 np.savetxt('WOHP_ss.dat', dos_ss)
 #----plot partial dos----
 fig, ax = plt.subplots()
 ax.plot(dos_ss[:,0],dos_ss[:,1])
 fig.savefig("WOHP_ss.png", dpi=300)
+print "done."
 
 # s-p
+print "Calculating WOHPs between s-p orbitals."
 dos_spx = get_WOHP(-1.701416,U_matrix,kpoints,R1,R2,0,5,eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
 np.savetxt('WOHP_spx.dat', dos_spx)
 dos_spy = get_WOHP(-4.251791,U_matrix,kpoints,R1,R2,0,6,eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
@@ -88,8 +96,10 @@ np.savetxt('WOHP_sp.dat', dos_sp)
 fig, ax = plt.subplots()
 ax.plot(dos_sp[:,0],dos_sp[:,1])
 fig.savefig("WOHP_sp.png", dpi=300)
+print "done."
 
 # p-p
+print "Calculating WOHPs between p-p orbitals."
 dos_pxpx = get_WOHP(-1.348359,U_matrix,kpoints,R1,R2,1,5,eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
 np.savetxt('WOHP_pxpx.dat', dos_pxpx)
 dos_pxpy = get_WOHP( 2.028108,U_matrix,kpoints,R1,R2,1,6,eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
@@ -115,5 +125,6 @@ np.savetxt('WOHP_pp.dat', dos_pp)
 fig, ax = plt.subplots()
 ax.plot(dos_pp[:,0],dos_pp[:,1])
 fig.savefig("WOHP_pp.png", dpi=300)
+print "done."
 
 #---------------------------------------------
