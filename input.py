@@ -21,6 +21,7 @@ U_matrix,kpoints = get_u_matrix("wannier90_u.mat",num_bands,num_bands,num_kpoint
 
 #---------------------------------------------
 # get me DOS
+# **Note that spin degeneracy is not considered here**
 dos = get_dos(eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
 np.savetxt('DOS_total.dat', dos)
 #----plot total dos----

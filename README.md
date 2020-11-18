@@ -56,4 +56,4 @@ For the method please cite the following paper in any publications arising from 
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](https://github.com/Chengcheng-Xiao/WOBSTER) file for details
+This project is licensed under the MIT License - see the [LICENSE.md](https://github.com/Chengcheng-Xiao/WOBSTER) file for details.

@@ -68,9 +68,11 @@ def get_dos(eigenvals, num_kpoints, e_min, e_max, nedos, T=0.1):
     DOS(\epsilon) = \sum_j \delta(E_j-\epsilon)
 
     \delta function is expressed as:
-    \delta = exp(-(E_j-\epsilon)**2/T)
+    \delta = \frac{1}{\sqrt{\pi*T}}*exp(-(E_j-\epsilon)**2/T)
 
     where T is the semaring factor.
+
+    ** Note that spin degeneracy is not considered here. **
 
     returns: dos
     format:  dos[ieng,energy/dos]
@@ -81,8 +83,7 @@ def get_dos(eigenvals, num_kpoints, e_min, e_max, nedos, T=0.1):
         for ikpt in range(num_kpoints):
             for ibnd in range(eigenvals[0].shape[0]):
                 dos[ieng,0] = energy[ieng]
-                # print np.exp(-(energy[ieng]-eigenvals[ikpt,ibnd])**2/T)/num_kpoints
-                dos[ieng,1] += np.exp(-(energy[ieng]-eigenvals[ikpt,ibnd])**2/T)/num_kpoints
+                dos[ieng,1] += 1/np.sqrt(np.pi*T)*np.exp(-(energy[ieng]-eigenvals[ikpt,ibnd])**2/T)/num_kpoints
     return dos
 
 def coef_gen(U_matrix,ibnd,iwan,R,kpoints,ikpt):
@@ -123,25 +124,19 @@ def get_WOOP(U_matrix, kpoints, R, iwan, eigenvals, num_kpoints, e_min, e_max, n
     '''
     WOOP under Wannier picture = projected DOS
 
-    WO)P = \sum_{j,k} C^*_{iwan,R;j} C_{iwan,R;j} \delta(E_j-\epsilon)
+    WOOP = \sum_{j,k} C^*_{iwan,R;j} C_{iwan,R;j} \delta(E_j-\epsilon)
 
     returns: dos
     format:  dos[ieng,energy/dos]
     '''
     dos = np.zeros((nedos,2), dtype=np.float)
     energy = np.linspace(e_min,e_max,nedos)
-    # print 'fuck'
     for ieng in range(nedos):
         dos[ieng,0] = energy[ieng]
         for ikpt in range(num_kpoints):
             for ibnd in range(eigenvals[0].shape[0]):
-                # if ieng == 0 and ikpt ==0:
-                #     print ieng,ikpt,ibnd
-                #     print np.real(np.dot(np.conj(coef_gen(U_matrix,ibnd,iwan,R,kpoints,ikpt)),coef_gen(U_matrix,ibnd,iwan,R,kpoints,ikpt)))
                 dos[ieng,1] += np.real(np.dot(np.conj(coef_gen(U_matrix,ibnd,iwan,R,kpoints,ikpt)),coef_gen(U_matrix,ibnd,iwan,R,kpoints,ikpt))) \
-                               * np.exp(-(energy[ieng]-eigenvals[ikpt,ibnd])**2/T)/num_kpoints
-                # dos[ieng,1] += (coeff[ikpt,ibnd,iwan,0]**2+coeff[ikpt,ibnd,iwan,1]**2)*np.exp(-(energy[ieng]-eigenvals[ikpt,ibnd])**2/T)/num_kpoints
-    # print 'fuck'
+                               * 1/np.sqrt(np.pi*T)* np.exp(-(energy[ieng]-eigenvals[ikpt,ibnd])**2/T)/num_kpoints
     return dos
 
 
@@ -156,15 +151,10 @@ def get_WOHP(Hopping, U_matrix, kpoints, R1, R2, iwan1, iwan2, eigenvals, num_kp
     '''
     dos = np.zeros((nedos,2), dtype=np.float)
     energy = np.linspace(e_min,e_max,nedos)
-    # print 'fuck'
     for ieng in range(nedos):
         dos[ieng,0] = energy[ieng]
         for ikpt in range(num_kpoints):
             for ibnd in range(eigenvals[0].shape[0]):
-                # print ieng,ikpt,ibnd
-                # print np.exp(-(energy[ieng]-eigenvals[ikpt,ibnd])**2/T)/num_kpoints
                 dos[ieng,1] += -Hopping*np.real(np.dot(np.conj(coef_gen(U_matrix,ibnd,iwan1,R1,kpoints,ikpt)),coef_gen(U_matrix,ibnd,iwan2,R2,kpoints,ikpt))) \
-                               *np.exp(-(energy[ieng]-eigenvals[ikpt,ibnd])**2/T)/num_kpoints
-                # dos[ieng,1] += (coeff[ikpt,ibnd,iwan,0]**2+coeff[ikpt,ibnd,iwan,1]**2)*np.exp(-(energy[ieng]-eigenvals[ikpt,ibnd])**2/T)/num_kpoints
-    # print 'fuck'
+                               * 1/np.sqrt(np.pi*T)* np.exp(-(energy[ieng]-eigenvals[ikpt,ibnd])**2/T)/num_kpoints
     return dos
