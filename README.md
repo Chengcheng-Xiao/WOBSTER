@@ -33,6 +33,7 @@ File need for calculation:
 
 1. `wannier90_u.mat`
 2. `wannier90.eig`
+3. `wannier90_hr.dat`
 
 Detailed preparation for Wannier90 generated files can be found in Wanneir90's user guide, or in the `example` folder.
 
@@ -46,6 +47,14 @@ Please read `input.py` for more information.
 ## Running the tests
 
 Go check the description in `example` folder.
+This code is provided as a python package without a command line interface. To run code, simply lunch a python interpreter and:
+
+```
+from wobster.WOBSTER import *
+from wobster.w90io import *
+```
+
+For detailed usage, please consult `input.py`.
 
 ## How to cite
 
