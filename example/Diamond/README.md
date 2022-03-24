@@ -7,7 +7,7 @@ The typical workflow of WOHP:
   - Wannierize system
 
 - WOHP part [`wannier90.eig` and `wannier90_u.mat` and `wannier90_hr.mat`]:
-  - copy `input.py` to `\input` and run it.
+  - go to `input/WOHP_input` and run `python input.py`.
   - analyze results (`WOHP_ss.dat`, `WOHP_sp.dat`)
 
 ![FIG.1](./FIG1.png)
