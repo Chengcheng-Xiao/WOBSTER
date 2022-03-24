@@ -4,6 +4,7 @@
 @author: cx219
 """
 from wobster.WOBSTER import *
+from wobster.w90io import *
 
 #---------------------------------------------
 # input parameters:
@@ -15,8 +16,9 @@ NEDOS = 200         #Total number of points between energy_min and energy_max
 SIGMA = 0.2         #smearing factor
 
 # read-in data
-eigenvals = get_eig("wannier90.eig",8,num_kpoints)
-U_matrix,kpoints = get_u_matrix("wannier90_u.mat",num_bands,num_bands,num_kpoints)
+eigenvals = read_eig("wannier90.eig",8,num_kpoints)
+U_matrix,kpoints = read_u_matrix("wannier90_u.mat",num_bands,num_bands,num_kpoints)
+hop,Rlatt,deg = read_hr()
 
 #---------------------------------------------
 # get me DOS
@@ -73,7 +75,13 @@ rememeber to insert Hopping energy from wannier90_hr.dat to get_WOHP function.
 
 # s-s
 print "Calculating WOHPs between s-s orbitals."
-dos_ss = get_WOHP(-3.055005,U_matrix,kpoints,R1,R2,0,4,eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
+wan1 = 0
+wan2 = 4
+latt_diff = np.array(R2, dtype=int) - np.array(R1, dtype=int)
+cell_indx_hop = np.where([np.all(latt==latt_diff) for i in Rlatt])[0][0]
+hopping = hop[cell_indx_hop,wan1,wan2].real
+
+dos_ss = get_WOHP(hopping,U_matrix,kpoints,R1,R2,wan1,wan2,eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
 np.savetxt('WOHP_ss.dat', dos_ss)
 #----plot partial dos----
 fig, ax = plt.subplots()
@@ -83,11 +91,11 @@ print "done."
 
 # s-p
 print "Calculating WOHPs between s-p orbitals."
-dos_spx = get_WOHP(-1.701416,U_matrix,kpoints,R1,R2,0,5,eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
+dos_spx = get_WOHP(hop[cell_indx_hop,0,5].real,U_matrix,kpoints,R1,R2,0,5,eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
 np.savetxt('WOHP_spx.dat', dos_spx)
-dos_spy = get_WOHP(-4.251791,U_matrix,kpoints,R1,R2,0,6,eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
+dos_spy = get_WOHP(hop[cell_indx_hop,0,6].real,U_matrix,kpoints,R1,R2,0,6,eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
 np.savetxt('WOHP_spy.dat', dos_spy)
-dos_spz = get_WOHP(-2.415476,U_matrix,kpoints,R1,R2,0,7,eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
+dos_spz = get_WOHP(hop[cell_indx_hop,0,7].real,U_matrix,kpoints,R1,R2,0,7,eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
 np.savetxt('WOHP_spz.dat', dos_spz)
 dos_sp = dos_spx
 dos_sp[:,1] = dos_spx[:,1]+dos_spy[:,1]+dos_spz[:,1]
@@ -100,23 +108,23 @@ print "done."
 
 # p-p
 print "Calculating WOHPs between p-p orbitals."
-dos_pxpx = get_WOHP(-1.348359,U_matrix,kpoints,R1,R2,1,5,eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
+dos_pxpx = get_WOHP(hop[cell_indx_hop,1,5].real,U_matrix,kpoints,R1,R2,1,5,eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
 np.savetxt('WOHP_pxpx.dat', dos_pxpx)
-dos_pxpy = get_WOHP( 2.028108,U_matrix,kpoints,R1,R2,1,6,eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
+dos_pxpy = get_WOHP(hop[cell_indx_hop,1,6].real,U_matrix,kpoints,R1,R2,1,6,eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
 np.savetxt('WOHP_pxpy.dat', dos_pxpy)
-dos_pxpz = get_WOHP( 1.197320,U_matrix,kpoints,R1,R2,1,7,eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
+dos_pxpz = get_WOHP(hop[cell_indx_hop,1,7].real,U_matrix,kpoints,R1,R2,1,7,eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
 np.savetxt('WOHP_pxpz.dat', dos_pxpz)
-dos_pypx = get_WOHP( 2.028108,U_matrix,kpoints,R1,R2,2,5,eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
+dos_pypx = get_WOHP(hop[cell_indx_hop,2,5].real,U_matrix,kpoints,R1,R2,2,5,eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
 np.savetxt('WOHP_pypx.dat', dos_pypx)
-dos_pypy = get_WOHP( 2.714971,U_matrix,kpoints,R1,R2,2,6,eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
+dos_pypy = get_WOHP(hop[cell_indx_hop,2,6].real,U_matrix,kpoints,R1,R2,2,6,eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
 np.savetxt('WOHP_pypy.dat', dos_pypy)
-dos_pypz = get_WOHP( 2.867865,U_matrix,kpoints,R1,R2,2,7,eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
+dos_pypz = get_WOHP(hop[cell_indx_hop,2,7].real,U_matrix,kpoints,R1,R2,2,7,eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
 np.savetxt('WOHP_pypz.dat', dos_pypz)
-dos_pzpx = get_WOHP( 1.197320,U_matrix,kpoints,R1,R2,3,5,eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
+dos_pzpx = get_WOHP(hop[cell_indx_hop,3,5].real,U_matrix,kpoints,R1,R2,3,5,eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
 np.savetxt('WOHP_pzpx.dat', dos_pzpx)
-dos_pzpy = get_WOHP( 2.867865,U_matrix,kpoints,R1,R2,3,6,eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
+dos_pzpy = get_WOHP(hop[cell_indx_hop,3,6].real,U_matrix,kpoints,R1,R2,3,6,eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
 np.savetxt('WOHP_pzpy.dat', dos_pzpy)
-dos_pzpz = get_WOHP(-0.511690,U_matrix,kpoints,R1,R2,3,7,eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
+dos_pzpz = get_WOHP(hop[cell_indx_hop,3,7].real,U_matrix,kpoints,R1,R2,3,7,eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
 np.savetxt('WOHP_pzpz.dat', dos_pzpz)
 dos_pp = dos_pxpx
 dos_pp[:,1] = dos_pxpx[:,1]+dos_pxpy[:,1]+dos_pxpz[:,1]+dos_pypx[:,1]+dos_pypy[:,1]+dos_pypz[:,1]+dos_pzpx[:,1]+dos_pzpy[:,1]+dos_pzpz[:,1]
