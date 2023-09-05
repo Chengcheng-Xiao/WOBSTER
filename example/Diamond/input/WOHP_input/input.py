@@ -23,14 +23,14 @@ hop,Rlatt,deg = read_hr()
 #---------------------------------------------
 # get me DOS
 # **Note that spin degeneracy is not considered here**
-print "Calculating total dos."
+print("Calculating total dos.")
 dos = get_dos(eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
 np.savetxt('DOS_total.dat', dos)
 #----plot total dos----
 fig, ax = plt.subplots()
 ax.plot(dos[:,0],dos[:,1])
 fig.savefig("total_DOS.png", dpi=300)
-print "done."
+print("done.")
 
 #---------------------------------------------
 # get me projected DOS (WOOP)
@@ -39,18 +39,18 @@ R1 = [0,0,0]
 R2 = [0,0,0]
 
 # s-s
-print "Calculating WOOPs for s orbital."
+print("Calculating WOOPs for s orbital.")
 dos_s = get_WOOP(U_matrix,kpoints,R1,R2,0,0,eigenvals,num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
 np.savetxt('DOS_s.dat', dos_s)
 #----plot partial dos----
 fig, ax = plt.subplots()
 ax.plot(dos_s[:,0],dos_s[:,1])
 fig.savefig("WOOP_s.png", dpi=300)
-print "done."
+print("done.")
 
 
 # p
-print "Calculating WOOPs for p orbitals."
+print("Calculating WOOPs for p orbitals.")
 dos_px = get_WOOP(U_matrix,kpoints,R1,R2,5,5,eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
 np.savetxt('DOS_px.dat', dos_px)
 dos_py = get_WOOP(U_matrix,kpoints,R1,R2,6,6,eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
@@ -64,7 +64,7 @@ np.savetxt('DOS_p.dat', dos_p)
 fig, ax = plt.subplots()
 ax.plot(dos_p[:,0],dos_p[:,1])
 fig.savefig("WOOP_p.png", dpi=300)
-print "done."
+print("done.")
 #---------------------------------------------
 
 #---------------------------------------------
@@ -74,11 +74,11 @@ rememeber to insert Hopping energy from wannier90_hr.dat to get_WOHP function.
 '''
 
 # s-s
-print "Calculating WOHPs between s-s orbitals."
+print("Calculating WOHPs between s-s orbitals.")
 wan1 = 0
 wan2 = 4
 latt_diff = np.array(R2, dtype=int) - np.array(R1, dtype=int)
-cell_indx_hop = np.where([np.all(latt==latt_diff) for i in Rlatt])[0][0]
+cell_indx_hop = np.where([np.all(latt==latt_diff) for latt in Rlatt])[0][0]
 hopping = hop[cell_indx_hop,wan1,wan2].real
 
 dos_ss = get_WOHP(hopping,U_matrix,kpoints,R1,R2,wan1,wan2,eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
@@ -87,10 +87,10 @@ np.savetxt('WOHP_ss.dat', dos_ss)
 fig, ax = plt.subplots()
 ax.plot(dos_ss[:,0],dos_ss[:,1])
 fig.savefig("WOHP_ss.png", dpi=300)
-print "done."
+print("done.")
 
 # s-p
-print "Calculating WOHPs between s-p orbitals."
+print("Calculating WOHPs between s-p orbitals.")
 dos_spx = get_WOHP(hop[cell_indx_hop,0,5].real,U_matrix,kpoints,R1,R2,0,5,eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
 np.savetxt('WOHP_spx.dat', dos_spx)
 dos_spy = get_WOHP(hop[cell_indx_hop,0,6].real,U_matrix,kpoints,R1,R2,0,6,eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
@@ -104,10 +104,10 @@ np.savetxt('WOHP_sp.dat', dos_sp)
 fig, ax = plt.subplots()
 ax.plot(dos_sp[:,0],dos_sp[:,1])
 fig.savefig("WOHP_sp.png", dpi=300)
-print "done."
+print("done.")
 
 # p-p
-print "Calculating WOHPs between p-p orbitals."
+print("Calculating WOHPs between p-p orbitals.")
 dos_pxpx = get_WOHP(hop[cell_indx_hop,1,5].real,U_matrix,kpoints,R1,R2,1,5,eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
 np.savetxt('WOHP_pxpx.dat', dos_pxpx)
 dos_pxpy = get_WOHP(hop[cell_indx_hop,1,6].real,U_matrix,kpoints,R1,R2,1,6,eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
@@ -133,6 +133,6 @@ np.savetxt('WOHP_pp.dat', dos_pp)
 fig, ax = plt.subplots()
 ax.plot(dos_pp[:,0],dos_pp[:,1])
 fig.savefig("WOHP_pp.png", dpi=300)
-print "done."
+print("done.")
 
 #---------------------------------------------

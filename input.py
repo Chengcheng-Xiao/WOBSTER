@@ -23,14 +23,14 @@ hop,Rlatt,deg = read_hr()
 #---------------------------------------------
 # get me DOS
 # **Note that spin degeneracy is not considered here**
-print "Calculating total dos."
+print("Calculating total dos.")
 dos = get_dos(eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
 np.savetxt('DOS_total.dat', dos)
 #----plot total dos----
 fig, ax = plt.subplots()
 ax.plot(dos[:,0],dos[:,1])
 fig.savefig("total_DOS.png", dpi=300)
-print "done."
+print("done.")
 
 #---------------------------------------------
 # get me projected DOS (WOOP)
@@ -40,18 +40,18 @@ R2 = [0,0,0]
 
 # For s-s between Si atoms
 #---------------------------------------------
-print "Calculating WOOPs for s orbital."
+print("Calculating WOOPs for s orbital.")
 dos_s = get_WOOP(U_matrix,kpoints, R1,R2,0,0, eigenvals,num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
 np.savetxt('DOS_s.dat', dos_s)
 #----plot partial dos----
 fig, ax = plt.subplots()
 ax.plot(dos_s[:,0],dos_s[:,1])
 fig.savefig("WOOP_s.png", dpi=300)
-print "done."
+print("done.")
 
 
 # p
-print "Calculating WOOPs for p orbitals."
+print("Calculating WOOPs for p orbitals.")
 dos_px = get_WOOP(U_matrix, kpoints, R1,R2,5,5, eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
 np.savetxt('DOS_px.dat', dos_px)
 dos_py = get_WOOP(U_matrix, kpoints, R1,R2,6,6, eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
@@ -65,7 +65,7 @@ np.savetxt('DOS_p.dat', dos_p)
 fig, ax = plt.subplots()
 ax.plot(dos_p[:,0],dos_p[:,1])
 fig.savefig("WOOP_p.png", dpi=300)
-print "done."
+print("done.")
 #---------------------------------------------
 
 #---------------------------------------------
@@ -74,7 +74,7 @@ print "done."
 
 # For s-s between Si atoms
 #---------------------------------------------
-print "Calculating WOHPs between s-s orbitals."
+print("Calculating WOHPs between s-s orbitals.")
 
 ## we are calculating wohp between R1_wan1 and R2_wan2
 wan1 = 0
@@ -82,7 +82,7 @@ wan2 = 4
 # the meaningful number for R is the difference between R1 and R2
 latt_diff = np.array(R2, dtype=int) - np.array(R1, dtype=int)
 # now calculate the index for cell R
-cell_indx_hop = np.where([np.all(latt==latt_diff) for i in Rlatt])[0][0]
+cell_indx_hop = np.where([np.all(latt==latt_diff) for latt in Rlatt])[0][0]
 # using the index, get me the hopping.
 hopping = hop[cell_indx_hop,wan1,wan2].real
 
@@ -92,15 +92,15 @@ np.savetxt('WOHP_ss.dat', dos_ss)
 fig, ax = plt.subplots()
 ax.plot(dos_ss[:,0],dos_ss[:,1])
 fig.savefig("WOHP_ss.png", dpi=300)
-print "done."
+print("done.")
 
 # For s-p between Si atoms
 #---------------------------------------------
-print "Calculating WOHPs between s-p orbitals."
+print("Calculating WOHPs between s-p orbitals.")
 # the meaningful number for R is the difference between R1 and R2
 latt_diff = np.array(R2, dtype=int) - np.array(R1, dtype=int)
 # now calculate the index for cell R
-cell_indx_hop = np.where([np.all(latt==latt_diff) for i in Rlatt])[0][0]
+cell_indx_hop = np.where([np.all(latt==latt_diff) for latt in Rlatt])[0][0]
 
 # s-px
 dos_spx = get_WOHP(hop[cell_indx_hop,0,5].real,U_matrix,kpoints,R1,R2,0,5,eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
@@ -118,15 +118,15 @@ np.savetxt('WOHP_sp.dat', dos_sp)
 fig, ax = plt.subplots()
 ax.plot(dos_sp[:,0],dos_sp[:,1])
 fig.savefig("WOHP_sp.png", dpi=300)
-print "done."
+print("done.")
 
 # For p-p between Si atoms
 #---------------------------------------------
-print "Calculating WOHPs between p-p orbitals."
+print("Calculating WOHPs between p-p orbitals.")
 # the meaningful number for R is the difference between R1 and R2
 latt_diff = np.array(R2, dtype=int) - np.array(R1, dtype=int)
 # now calculate the index for cell R
-cell_indx_hop = np.where([np.all(latt==latt_diff) for i in Rlatt])[0][0]
+cell_indx_hop = np.where([np.all(latt==latt_diff) for latt in Rlatt])[0][0]
 
 dos_pxpx = get_WOHP(hop[cell_indx_hop,1,5].real,U_matrix,kpoints,R1,R2,1,5,eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
 np.savetxt('WOHP_pxpx.dat', dos_pxpx)
@@ -153,6 +153,6 @@ np.savetxt('WOHP_pp.dat', dos_pp)
 fig, ax = plt.subplots()
 ax.plot(dos_pp[:,0],dos_pp[:,1])
 fig.savefig("WOHP_pp.png", dpi=300)
-print "done."
+print("done.")
 
 #---------------------------------------------
