@@ -78,7 +78,7 @@ print "Calculating WOHPs between s-s orbitals."
 wan1 = 0
 wan2 = 4
 latt_diff = np.array(R2, dtype=int) - np.array(R1, dtype=int)
-cell_indx_hop = np.where([np.all(latt==latt_diff) for i in Rlatt])[0][0]
+cell_indx_hop = np.where([np.all(latt==latt_diff) for latt in Rlatt])[0][0]
 hopping = hop[cell_indx_hop,wan1,wan2].real
 
 dos_ss = get_WOHP(hopping,U_matrix,kpoints,R1,R2,wan1,wan2,eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)

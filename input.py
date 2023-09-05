@@ -82,7 +82,7 @@ wan2 = 4
 # the meaningful number for R is the difference between R1 and R2
 latt_diff = np.array(R2, dtype=int) - np.array(R1, dtype=int)
 # now calculate the index for cell R
-cell_indx_hop = np.where([np.all(latt==latt_diff) for i in Rlatt])[0][0]
+cell_indx_hop = np.where([np.all(latt==latt_diff) for latt in Rlatt])[0][0]
 # using the index, get me the hopping.
 hopping = hop[cell_indx_hop,wan1,wan2].real
 
@@ -100,7 +100,7 @@ print "Calculating WOHPs between s-p orbitals."
 # the meaningful number for R is the difference between R1 and R2
 latt_diff = np.array(R2, dtype=int) - np.array(R1, dtype=int)
 # now calculate the index for cell R
-cell_indx_hop = np.where([np.all(latt==latt_diff) for i in Rlatt])[0][0]
+cell_indx_hop = np.where([np.all(latt==latt_diff) for latt in Rlatt])[0][0]
 
 # s-px
 dos_spx = get_WOHP(hop[cell_indx_hop,0,5].real,U_matrix,kpoints,R1,R2,0,5,eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
@@ -126,7 +126,7 @@ print "Calculating WOHPs between p-p orbitals."
 # the meaningful number for R is the difference between R1 and R2
 latt_diff = np.array(R2, dtype=int) - np.array(R1, dtype=int)
 # now calculate the index for cell R
-cell_indx_hop = np.where([np.all(latt==latt_diff) for i in Rlatt])[0][0]
+cell_indx_hop = np.where([np.all(latt==latt_diff) for latt in Rlatt])[0][0]
 
 dos_pxpx = get_WOHP(hop[cell_indx_hop,1,5].real,U_matrix,kpoints,R1,R2,1,5,eigenvals, num_kpoints, energy_min, energy_max, NEDOS, SIGMA)
 np.savetxt('WOHP_pxpx.dat', dos_pxpx)
