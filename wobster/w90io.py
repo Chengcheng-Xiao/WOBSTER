@@ -99,7 +99,7 @@ def read_u_matrix(file_name,dimension_fix,dimension,num_kpoints):
                 for dat in range(2):
 #                    matrixs[k][num_wann][num_bands][dat]= matrix[dimension*num_bands+num_wann][dat] # Manual tells us "row first", and its a LIE?
                     matrixs[k][num_bands][num_wann][dat]= matrix[dimension*num_wann+num_bands][dat]
-    return np.array(matrixs,dtype=np.float),np.array(kpoints,dtype=np.float)
+    return np.array(matrixs,dtype=float),np.array(kpoints,dtype=float)
 
 def read_eig(file_name,dimension,num_kpoints):
     '''
@@ -111,6 +111,6 @@ def read_eig(file_name,dimension,num_kpoints):
     #readin data to data[]
     file = open(file_name,"r")
     content = [x.rstrip("\n") for x in file]
-    data = np.array([x.split()[2] for x in content[:]],dtype=np.float)
+    data = np.array([x.split()[2] for x in content[:]],dtype=float)
     eigenvals = data.reshape(num_kpoints,dimension)
     return eigenvals

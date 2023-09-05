@@ -41,7 +41,7 @@ def get_dos(eigenvals, num_kpoints, e_min, e_max, nedos, T=0.1):
     returns: dos
     format:  dos[ieng,energy/dos]
     '''
-    dos = np.zeros((nedos,2), dtype=np.float)
+    dos = np.zeros((nedos,2), dtype=float)
     energy = np.linspace(e_min,e_max,nedos)
     for ieng in range(nedos):
         for ikpt in range(num_kpoints):
@@ -69,7 +69,7 @@ def get_WOOP(U_matrix, kpoints, R1, R2, iwan1, iwan2, eigenvals, num_kpoints, e_
     returns: dos
     format:  dos[ieng,energy/dos]
     '''
-    dos = np.zeros((nedos,2), dtype=np.float)
+    dos = np.zeros((nedos,2), dtype=float)
     energy = np.linspace(e_min,e_max,nedos)
     for ieng in range(nedos):
         dos[ieng,0] = energy[ieng]
@@ -89,7 +89,7 @@ def get_WOHP(Hopping, U_matrix, kpoints, R1, R2, iwan1, iwan2, eigenvals, num_kp
     returns: dos
     format:  dos[ieng,energy/dos]
     '''
-    dos = np.zeros((nedos,2), dtype=np.float)
+    dos = np.zeros((nedos,2), dtype=float)
     energy = np.linspace(e_min,e_max,nedos)
     for ieng in range(nedos):
         dos[ieng,0] = energy[ieng]
